@@ -64,19 +64,19 @@ jobs:
           sudo mv ~/repo /usr/local/bin/repo
 
       - name: 初始化版本库并同步
-  working-directory: ${{ env.WORKSPACE_DIR }}
+        working-directory: ${{ env.WORKSPACE_DIR }}
         run: |
           repo init -u https://github.com/Winkmoon/kernel_tiantiandaisuki_sm8650.git -b fifteen -m ${{ env.FEIL }}.xml --depth=1
-    repo sync
-    
-    find kernel_platform -name "abi_gki_protected_exports_*" -delete || echo "No protected exports found!"
-    
-    for script_path in kernel_platform/common/scripts/setlocalversion kernel_platform/msm-kernel/scripts/setlocalversion kernel_platform/external/dtc/scripts/setlocalversion; do
-      if [ -f "$script_path" ]; then
-        sed -i 's/ -dirty//g' "$script_path"
-      fi
-    done
-      
+          repo sync
+          
+          find kernel_platform -name "abi_gki_protected_exports_*" -delete || echo "No protected exports found!"
+          
+          for script_path in kernel_platform/common/scripts/setlocalversion kernel_platform/msm-kernel/scripts/setlocalversion kernel_platform/external/dtc/scripts/setlocalversion; do
+            if [ -f "$script_path" ]; then
+              sed -i 's/ -dirty//g' "$script_path"
+            fi
+          done
+
       - name: 设置 KernelSU 分支
         id: setup_branch
         run: |
@@ -90,7 +90,6 @@ jobs:
         id: ksu_version
         working-directory: ${{ env.WORKSPACE_DIR }}/kernel_platform
         run: |
-
           curl -LSs "https://raw.github.com/ShirkNeko/SukiSU-Ultra/refs/heads/main/kernel/setup.sh" | bash ${{ env.BRANCH }}
           
           cd ./KernelSU
@@ -103,7 +102,6 @@ jobs:
       - name: 准备和应用补丁
         working-directory: ${{ env.WORKSPACE_DIR }}
         run: |
-          
           git clone https://gitlab.com/simonpunk/susfs4ksu.git -b gki-${{ env.ANDROID_VERSION }}-${{ env.KERNEL_VERSION }}
           git clone https://github.com/ShirkNeko/SukiSU_patch.git
           
@@ -152,7 +150,7 @@ jobs:
         run: |
           sed -i "/stable_scmversion_cmd/s/-maybe-dirty//g" ./build/kernel/kleaf/impl/stamp.bzl
           sed -i 's|echo "\$res"|echo "'"$(echo "${{ env.KERNEL_NAME }}" | sed 's/[\&/]/\\&/g')"'"|g' ./common/scripts/setlocalversion
-           
+
       - name: 构建内核
         working-directory: ${{ env.WORKSPACE_DIR }}
         run: |
