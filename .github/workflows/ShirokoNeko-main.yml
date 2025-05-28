@@ -76,7 +76,7 @@ jobs:
         sed -i 's/ -dirty//g' "$script_path"
       fi
     done
-      
+   
       - name: 设置 KernelSU 分支
         id: setup_branch
         run: |
