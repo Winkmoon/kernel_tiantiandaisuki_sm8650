@@ -66,12 +66,12 @@ jobs:
       - name: 初始化版本库并同步
         working-directory: ${{ env.WORKSPACE_DIR }}
         run: |
-          repo init -u https://github.com/Winkmoon/kernel_tiantiandaisuki_sm8650.git -b fifteen -m ${{ env.FEIL }}.xml --depth=1
-          repo sync
+          git clone https://github.com/Winkmoon/kernel_tiantiandaisuki_sm8650.git -b fifteen kernel_platform
           
-          find kernel_platform -name "abi_gki_protected_exports_*" -delete || echo "No protected exports found!"
+          cd kernel_platform
+          find . -name "abi_gki_protected_exports_*" -delete || echo "No protected exports found!"
           
-          for script_path in kernel_platform/common/scripts/setlocalversion kernel_platform/msm-kernel/scripts/setlocalversion kernel_platform/external/dtc/scripts/setlocalversion; do
+          for script_path in common/scripts/setlocalversion msm-kernel/scripts/setlocalversion external/dtc/scripts/setlocalversion; do
             if [ -f "$script_path" ]; then
               sed -i 's/ -dirty//g' "$script_path"
             fi
