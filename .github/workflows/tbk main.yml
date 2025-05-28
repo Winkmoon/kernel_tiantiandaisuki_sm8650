@@ -65,8 +65,8 @@ jobs:
 
       - name: 初始化版本库并同步
   working-directory: ${{ env.WORKSPACE_DIR }}
-  run: |
-    repo init -u https://github.com/Winkmoon/kernel_tiantiandaisuki_sm8650.git -b fifteen -m ${{ env.FEIL }}.xml --depth=1
+        run: |
+          repo init -u https://github.com/Winkmoon/kernel_tiantiandaisuki_sm8650.git -b fifteen -m ${{ env.FEIL }}.xml --depth=1
     repo sync
     
     find kernel_platform -name "abi_gki_protected_exports_*" -delete || echo "No protected exports found!"
