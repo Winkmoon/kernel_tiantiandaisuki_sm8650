@@ -64,19 +64,18 @@ jobs:
           sudo mv ~/repo /usr/local/bin/repo
 
       - name: 初始化版本库并同步
-        working-directory: ${{ env.WORKSPACE_DIR }}
-        run: |
-
-          repo init -u https://github.com/OnePlusOSS/kernel_manifest.git -b oneplus/${{ env.CPU }} -m ${{ env.FEIL }}.xml --depth=1
-          repo sync
-          
-          find kernel_platform -name "abi_gki_protected_exports_*" -delete || echo "No protected exports found!"
-          
-          for script_path in kernel_platform/common/scripts/setlocalversion kernel_platform/msm-kernel/scripts/setlocalversion kernel_platform/external/dtc/scripts/setlocalversion; do
-            if [ -f "$script_path" ]; then
-              sed -i 's/ -dirty//g' "$script_path"
-            fi
-          done
+  working-directory: ${{ env.WORKSPACE_DIR }}
+  run: |
+    repo init -u https://github.com/Winkmoon/kernel_tiantiandaisuki_sm8650.git -b fifteen -m ${{ env.FEIL }}.xml --depth=1
+    repo sync
+    
+    find kernel_platform -name "abi_gki_protected_exports_*" -delete || echo "No protected exports found!"
+    
+    for script_path in kernel_platform/common/scripts/setlocalversion kernel_platform/msm-kernel/scripts/setlocalversion kernel_platform/external/dtc/scripts/setlocalversion; do
+      if [ -f "$script_path" ]; then
+        sed -i 's/ -dirty//g' "$script_path"
+      fi
+    done
       
       - name: 设置 KernelSU 分支
         id: setup_branch
