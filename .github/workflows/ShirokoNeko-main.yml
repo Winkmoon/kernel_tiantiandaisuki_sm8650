@@ -38,8 +38,8 @@ jobs:
 
       - name: 配置环境
         run: |
-          git config --global user.name "Sorynthia"
-          git config --global user.email "2984886500@qq.com"
+          git config --global user.name "Winkmoon"
+          git config --global user.email "3432632982@qq.com"
           
           mkdir -p ${{ env.WORKSPACE_DIR }}
 
@@ -62,21 +62,21 @@ jobs:
           curl https://storage.googleapis.com/git-repo-downloads/repo > ~/repo
           chmod a+x ~/repo
           sudo mv ~/repo /usr/local/bin/repo
-
-      - name: 初始化版本库并同步
-        working-directory: ${{ env.WORKSPACE_DIR }}
-        run: |
-
-          repo init -u https://github.com/Winkmoon/kernel_tiantiandaisuki_sm8650 -b fifteen --depth=1
-          repo sync
-          
-          find kernel_platform -name "abi_gki_protected_exports_*" -delete || echo "No protected exports found!"
-          
-          for script_path in kernel_platform/common/scripts/setlocalversion kernel_platform/msm-kernel/scripts/setlocalversion kernel_platform/external/dtc/scripts/setlocalversion; do
-            if [ -f "$script_path" ]; then
-              sed -i 's/ -dirty//g' "$script_path"
-            fi
-          done
+   
+     - name: 初始化版本库并同步   
+     
+  working-directory: ${{ env.WORKSPACE_DIR }}
+  run: |
+    repo init -u https://github.com/Winkmoon/kernel_tiantiandaisuki_sm8650 -b fifteen --depth=1
+    repo sync
+    
+    find kernel_platform -name "abi_gki_protected_exports_*" -delete || echo "No protected exports found!"
+    
+    for script_path in kernel_platform/common/scripts/setlocalversion kernel_platform/msm-kernel/scripts/setlocalversion kernel_platform/external/dtc/scripts/setlocalversion; do
+      if [ -f "$script_path" ]; then
+        sed -i 's/ -dirty//g' "$script_path"
+      fi
+    done
       
       - name: 设置 KernelSU 分支
         id: setup_branch
